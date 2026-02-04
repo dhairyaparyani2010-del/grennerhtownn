@@ -1,1 +1,2049 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Greener HTown - Houston Carbon Tracker</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
 
+    body {
+      font-family: 'Segoe UI', Tahoma, sans-serif;
+      background: linear-gradient(135deg, #0f172a 0%, #1a2a4a 100%);
+      color: #f1f5f9;
+      min-height: 100vh;
+    }
+
+    /* LOGIN SCREEN */
+    .login-screen {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 100vh;
+      padding: 1rem;
+    }
+
+    .login-box {
+      background: rgba(30, 41, 59, 0.95);
+      border: 2px solid #10b981;
+      border-radius: 20px;
+      padding: 2.5rem;
+      max-width: 420px;
+      width: 100%;
+      text-align: center;
+    }
+
+    .login-title {
+      font-size: 2.5rem;
+      margin-bottom: 0.5rem;
+      color: #10b981;
+    }
+
+    .login-subtitle {
+      color: #cbd5e1;
+      margin-bottom: 2rem;
+      font-size: 1.05rem;
+    }
+
+    .login-form {
+      display: flex;
+      flex-direction: column;
+      gap: 1rem;
+    }
+
+    .login-input {
+      background: rgba(15, 23, 42, 0.8);
+      border: 1px solid #334155;
+      border-radius: 10px;
+      padding: 1rem;
+      color: #f1f5f9;
+      font-size: 1rem;
+      transition: all 0.3s;
+    }
+
+    .login-input:focus {
+      outline: none;
+      border-color: #10b981;
+      box-shadow: 0 0 0 3px rgba(16, 185, 129, 0.2);
+    }
+
+    .login-btn {
+      background: linear-gradient(135deg, #10b981 0%, #0ea5e9 100%);
+      color: #0f172a;
+      border: none;
+      padding: 1rem;
+      border-radius: 10px;
+      font-weight: 800;
+      cursor: pointer;
+      font-size: 1rem;
+      transition: all 0.3s;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+    }
+
+    .login-btn:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 10px 30px rgba(16, 185, 129, 0.4);
+    }
+
+    /* APP SCREEN */
+    .app-screen {
+      display: none;
+    }
+
+    .app-screen.active {
+      display: block;
+    }
+
+    header {
+      background: rgba(15, 23, 42, 0.95);
+      border-bottom: 1px solid #334155;
+      padding: 1rem 1.5rem;
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      backdrop-filter: blur(10px);
+    }
+
+    .header-content {
+      max-width: 1400px;
+      margin: 0 auto;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 1rem;
+      flex-wrap: wrap;
+    }
+
+    .logo {
+      font-size: 1.8rem;
+      font-weight: 800;
+      color: #10b981;
+    }
+
+    .user-info {
+      color: #cbd5e1;
+      font-size: 0.95rem;
+    }
+
+    .logout-btn {
+      background: #ef4444;
+      color: white;
+      border: none;
+      padding: 0.6rem 1.2rem;
+      border-radius: 8px;
+      cursor: pointer;
+      font-weight: 700;
+      transition: all 0.3s;
+      font-size: 0.9rem;
+    }
+
+    .logout-btn:hover {
+      background: #dc2626;
+    }
+
+    nav {
+      display: flex;
+      gap: 0.5rem;
+      flex-wrap: wrap;
+    }
+
+    nav button {
+      background: rgba(30, 41, 59, 0.6);
+      border: 1px solid #334155;
+      padding: 0.6rem 1.2rem;
+      color: #cbd5e1;
+      cursor: pointer;
+      border-radius: 8px;
+      transition: all 0.3s;
+      font-weight: 600;
+      font-size: 0.9rem;
+    }
+
+    nav button:hover, nav button.active {
+      background: linear-gradient(135deg, #10b981 0%, #0ea5e9 100%);
+      color: #0f172a;
+      border-color: transparent;
+    }
+
+    .container {
+      max-width: 1400px;
+      margin: 0 auto;
+      padding: 1.5rem;
+    }
+
+    .page {
+      display: none;
+    }
+
+    .page.active {
+      display: block;
+    }
+
+    .section-title {
+      font-size: 2rem;
+      margin-bottom: 1.5rem;
+      font-weight: 800;
+    }
+
+    /* STATS GRID */
+    .stats-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+      gap: 1rem;
+      margin-bottom: 2rem;
+    }
+
+    .stat-card {
+      background: rgba(30, 41, 59, 0.8);
+      border: 1px solid #334155;
+      border-radius: 12px;
+      padding: 1.5rem;
+      text-align: center;
+      transition: all 0.3s;
+    }
+
+    .stat-card:hover {
+      transform: translateY(-3px);
+      border-color: #10b981;
+    }
+
+    .stat-value {
+      font-size: 2rem;
+      font-weight: 800;
+      background: linear-gradient(135deg, #10b981 0%, #0ea5e9 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      margin-bottom: 0.3rem;
+    }
+
+    .stat-label {
+      color: #cbd5e1;
+      font-size: 0.8rem;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      font-weight: 700;
+    }
+
+    /* QUICK ACTIONS */
+    .quick-actions {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+      gap: 1rem;
+      margin-bottom: 2rem;
+    }
+
+    .quick-btn {
+      background: rgba(30, 41, 59, 0.8);
+      border: 1px solid #334155;
+      border-radius: 12px;
+      padding: 1.2rem 0.8rem;
+      cursor: pointer;
+      transition: all 0.3s;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 0.6rem;
+      color: #f1f5f9;
+      font-weight: 700;
+      font-size: 0.9rem;
+    }
+
+    .quick-btn:hover {
+      background: linear-gradient(135deg, #10b981 0%, #0ea5e9 100%);
+      color: #0f172a;
+      transform: translateY(-3px);
+      border-color: transparent;
+    }
+
+    .quick-icon {
+      font-size: 2rem;
+    }
+
+    /* TRACKING CARD */
+    .tracking-card {
+      background: rgba(30, 41, 59, 0.8);
+      border: 1px solid #334155;
+      border-radius: 16px;
+      padding: 2rem;
+      margin-bottom: 2rem;
+    }
+
+    .tabs {
+      display: flex;
+      gap: 0.5rem;
+      margin-bottom: 2rem;
+      border-bottom: 2px solid #334155;
+      overflow-x: auto;
+    }
+
+    .tab-btn {
+      background: none;
+      border: none;
+      padding: 1rem 1.5rem;
+      color: #cbd5e1;
+      cursor: pointer;
+      font-weight: 700;
+      border-bottom: 3px solid transparent;
+      transition: all 0.3s;
+      white-space: nowrap;
+      font-size: 0.95rem;
+    }
+
+    .tab-btn.active {
+      color: #10b981;
+      border-bottom-color: #10b981;
+    }
+
+    .tab-content {
+      display: none;
+    }
+
+    .tab-content.active {
+      display: block;
+    }
+
+    .form-group {
+      margin-bottom: 1.5rem;
+    }
+
+    .form-label {
+      display: block;
+      margin-bottom: 0.6rem;
+      font-weight: 700;
+      font-size: 0.95rem;
+    }
+
+    input, select {
+      width: 100%;
+      background: rgba(15, 23, 42, 0.8);
+      border: 1px solid #334155;
+      border-radius: 10px;
+      padding: 0.9rem;
+      color: #f1f5f9;
+      font-family: inherit;
+      font-size: 0.95rem;
+      transition: all 0.3s;
+    }
+
+    input:focus, select:focus {
+      outline: none;
+      border-color: #10b981;
+      box-shadow: 0 0 0 3px rgba(16, 185, 129, 0.2);
+    }
+
+    .impact-box {
+      background: linear-gradient(135deg, rgba(16, 185, 129, 0.15) 0%, rgba(14, 165, 233, 0.1) 100%);
+      border: 1px solid #10b981;
+      padding: 1rem;
+      border-radius: 10px;
+      margin-bottom: 1.5rem;
+      font-weight: 600;
+      font-size: 1.05rem;
+      text-align: center;
+    }
+
+    .btn-primary {
+      background: linear-gradient(135deg, #10b981 0%, #0ea5e9 100%);
+      color: #0f172a;
+      border: none;
+      padding: 1rem;
+      border-radius: 10px;
+      font-weight: 800;
+      cursor: pointer;
+      width: 100%;
+      transition: all 0.3s;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      font-size: 0.95rem;
+    }
+
+    .btn-primary:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 10px 30px rgba(16, 185, 129, 0.4);
+    }
+
+    /* FEATURES */
+    .features-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+      gap: 1.5rem;
+      margin-bottom: 2rem;
+    }
+
+    .feature-card {
+      background: rgba(30, 41, 59, 0.8);
+      border: 1px solid #334155;
+      border-radius: 16px;
+      padding: 1.5rem;
+      transition: all 0.3s;
+    }
+
+    .feature-card:hover {
+      transform: translateY(-5px);
+      border-color: #10b981;
+    }
+
+    .feature-icon {
+      font-size: 2.5rem;
+      margin-bottom: 1rem;
+    }
+
+    .feature-card h3 {
+      font-size: 1.15rem;
+      margin-bottom: 0.6rem;
+      font-weight: 700;
+      color: #10b981;
+    }
+
+    .feature-card p {
+      color: #cbd5e1;
+      font-size: 0.9rem;
+      line-height: 1.5;
+    }
+
+    /* INFO CARD */
+    .info-card {
+      background: linear-gradient(135deg, rgba(16, 185, 129, 0.1) 0%, rgba(14, 165, 233, 0.1) 100%);
+      border: 2px solid #10b981;
+      border-radius: 16px;
+      padding: 2rem;
+      margin-bottom: 2rem;
+    }
+
+    .info-title {
+      font-size: 1.3rem;
+      margin-bottom: 1rem;
+      font-weight: 800;
+      color: #10b981;
+    }
+
+    .info-list {
+      list-style: none;
+      padding: 0;
+    }
+
+    .info-list li {
+      padding: 0.8rem 0;
+      border-bottom: 1px solid rgba(51, 65, 85, 0.5);
+      color: #cbd5e1;
+      line-height: 1.6;
+    }
+
+    .info-list li:last-child {
+      border-bottom: none;
+    }
+
+    .info-list strong {
+      color: #f1f5f9;
+      font-weight: 700;
+    }
+
+    .toast {
+      position: fixed;
+      bottom: -100px;
+      left: 50%;
+      transform: translateX(-50%);
+      background: linear-gradient(135deg, #10b981 0%, #0ea5e9 100%);
+      color: #0f172a;
+      padding: 1rem 2rem;
+      border-radius: 12px;
+      font-weight: 800;
+      box-shadow: 0 10px 30px rgba(16, 185, 129, 0.4);
+      transition: bottom 0.4s;
+      z-index: 1000;
+      max-width: 90%;
+      text-align: center;
+    }
+
+    .toast.show {
+      bottom: 2rem;
+    }
+
+    /* ONBOARDING POPUP */
+    .onboarding-overlay {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(15, 23, 42, 0.95);
+      z-index: 2000;
+      display: none;
+      align-items: center;
+      justify-content: center;
+      padding: 1rem;
+    }
+
+    .onboarding-overlay.active {
+      display: flex;
+    }
+
+    .onboarding-popup {
+      background: linear-gradient(135deg, rgba(30, 41, 59, 0.95) 0%, rgba(26, 42, 74, 0.95) 100%);
+      border: 2px solid #10b981;
+      border-radius: 20px;
+      padding: 3rem;
+      max-width: 600px;
+      width: 100%;
+      text-align: center;
+      position: relative;
+    }
+
+    .onboarding-step-number {
+      display: inline-flex;
+      width: 60px;
+      height: 60px;
+      background: linear-gradient(135deg, #10b981 0%, #0ea5e9 100%);
+      border-radius: 50%;
+      align-items: center;
+      justify-content: center;
+      color: #0f172a;
+      font-weight: 800;
+      font-size: 1.8rem;
+      margin-bottom: 1.5rem;
+    }
+
+    .onboarding-title {
+      font-size: 2rem;
+      margin-bottom: 1rem;
+      font-weight: 800;
+      color: #10b981;
+    }
+
+    .onboarding-text {
+      font-size: 1.15rem;
+      color: #cbd5e1;
+      line-height: 1.8;
+      margin-bottom: 2rem;
+    }
+
+    .onboarding-buttons {
+      display: flex;
+      gap: 1rem;
+      justify-content: center;
+    }
+
+    .onboarding-btn {
+      padding: 1rem 2rem;
+      border-radius: 10px;
+      font-weight: 700;
+      cursor: pointer;
+      font-size: 1rem;
+      transition: all 0.3s;
+      border: none;
+    }
+
+    .onboarding-btn-next {
+      background: linear-gradient(135deg, #10b981 0%, #0ea5e9 100%);
+      color: #0f172a;
+      flex: 1;
+    }
+
+    .onboarding-btn-next:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 10px 30px rgba(16, 185, 129, 0.4);
+    }
+
+    .onboarding-btn-skip {
+      background: rgba(51, 65, 85, 0.5);
+      color: #cbd5e1;
+      padding: 1rem 1.5rem;
+    }
+
+    .onboarding-btn-skip:hover {
+      background: rgba(51, 65, 85, 0.8);
+    }
+
+    .onboarding-progress {
+      margin-top: 1.5rem;
+      color: #64748b;
+      font-size: 0.9rem;
+      font-weight: 600;
+    }
+
+    /* AI CHATBOT */
+    .chatbot-container {
+      position: fixed;
+      bottom: 2rem;
+      right: 2rem;
+      z-index: 1500;
+    }
+
+    .chatbot-button {
+      width: 60px;
+      height: 60px;
+      border-radius: 50%;
+      background: linear-gradient(135deg, #10b981 0%, #0ea5e9 100%);
+      border: none;
+      cursor: pointer;
+      box-shadow: 0 4px 20px rgba(16, 185, 129, 0.4);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.8rem;
+      transition: all 0.3s;
+      animation: pulse 2s infinite;
+    }
+
+    .chatbot-button:hover {
+      transform: scale(1.1);
+      box-shadow: 0 6px 30px rgba(16, 185, 129, 0.6);
+    }
+
+    @keyframes pulse {
+      0%, 100% {
+        box-shadow: 0 4px 20px rgba(16, 185, 129, 0.4);
+      }
+      50% {
+        box-shadow: 0 4px 30px rgba(16, 185, 129, 0.8);
+      }
+    }
+
+    .chatbot-window {
+      position: fixed;
+      bottom: 100px;
+      right: 2rem;
+      width: 380px;
+      max-height: 600px;
+      background: rgba(30, 41, 59, 0.98);
+      border: 2px solid #10b981;
+      border-radius: 20px;
+      display: none;
+      flex-direction: column;
+      box-shadow: 0 10px 40px rgba(0, 0, 0, 0.5);
+      overflow: hidden;
+    }
+
+    .chatbot-window.active {
+      display: flex;
+    }
+
+    .chatbot-header {
+      background: linear-gradient(135deg, #10b981 0%, #0ea5e9 100%);
+      padding: 1.2rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .chatbot-header-title {
+      font-weight: 800;
+      font-size: 1.1rem;
+      color: #0f172a;
+    }
+
+    .chatbot-close {
+      background: rgba(15, 23, 42, 0.3);
+      border: none;
+      width: 30px;
+      height: 30px;
+      border-radius: 50%;
+      cursor: pointer;
+      color: #0f172a;
+      font-weight: 800;
+      font-size: 1.2rem;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: all 0.3s;
+    }
+
+    .chatbot-close:hover {
+      background: rgba(15, 23, 42, 0.5);
+    }
+
+    .chatbot-messages {
+      flex: 1;
+      overflow-y: auto;
+      padding: 1.5rem;
+      display: flex;
+      flex-direction: column;
+      gap: 1rem;
+    }
+
+    .chatbot-message {
+      padding: 1rem;
+      border-radius: 12px;
+      max-width: 85%;
+      line-height: 1.5;
+      font-size: 0.95rem;
+    }
+
+    .chatbot-message-bot {
+      background: linear-gradient(135deg, rgba(16, 185, 129, 0.15) 0%, rgba(14, 165, 233, 0.15) 100%);
+      border: 1px solid #10b981;
+      align-self: flex-start;
+    }
+
+    .chatbot-message-user {
+      background: rgba(51, 65, 85, 0.6);
+      align-self: flex-end;
+      border: 1px solid #334155;
+    }
+
+    .chatbot-input-container {
+      padding: 1rem;
+      border-top: 1px solid #334155;
+      display: flex;
+      gap: 0.8rem;
+    }
+
+    .chatbot-input {
+      flex: 1;
+      background: rgba(15, 23, 42, 0.8);
+      border: 1px solid #334155;
+      border-radius: 10px;
+      padding: 0.8rem;
+      color: #f1f5f9;
+      font-family: inherit;
+      font-size: 0.95rem;
+    }
+
+    .chatbot-input:focus {
+      outline: none;
+      border-color: #10b981;
+    }
+
+    .chatbot-send {
+      background: linear-gradient(135deg, #10b981 0%, #0ea5e9 100%);
+      color: #0f172a;
+      border: none;
+      padding: 0.8rem 1.2rem;
+      border-radius: 10px;
+      font-weight: 700;
+      cursor: pointer;
+      transition: all 0.3s;
+    }
+
+    .chatbot-send:hover {
+      transform: translateY(-2px);
+    }
+
+    .chatbot-quick-replies {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.5rem;
+      padding: 0 1.5rem 1rem 1.5rem;
+    }
+
+    .chatbot-quick-reply {
+      background: rgba(51, 65, 85, 0.6);
+      border: 1px solid #334155;
+      padding: 0.5rem 1rem;
+      border-radius: 20px;
+      font-size: 0.85rem;
+      cursor: pointer;
+      transition: all 0.3s;
+      color: #cbd5e1;
+      font-weight: 600;
+    }
+
+    .chatbot-quick-reply:hover {
+      background: linear-gradient(135deg, #10b981 0%, #0ea5e9 100%);
+      color: #0f172a;
+      border-color: transparent;
+    }
+
+    @media (max-width: 768px) {
+      .chatbot-window {
+        width: calc(100vw - 2rem);
+        right: 1rem;
+        left: 1rem;
+        bottom: 90px;
+      }
+
+      .chatbot-container {
+        right: 1rem;
+      }
+
+      .onboarding-popup {
+        padding: 2rem 1.5rem;
+      }
+
+      .onboarding-buttons {
+        flex-direction: column;
+      }
+    }
+
+    @media (max-width: 768px) {
+      .header-content {
+        flex-direction: column;
+      }
+
+      nav {
+        width: 100%;
+        justify-content: center;
+      }
+
+      .stats-grid {
+        grid-template-columns: repeat(2, 1fr);
+      }
+
+      .quick-actions {
+        grid-template-columns: repeat(2, 1fr);
+      }
+
+      .features-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+  </style>
+</head>
+<body>
+  <!-- LOGIN SCREEN -->
+  <div id="loginScreen" class="login-screen">
+    <div class="login-box">
+      <div class="login-title">🌱 Greener HTown</div>
+      <div class="login-subtitle">Track Your Carbon Impact in Houston</div>
+      
+      <div class="login-form">
+        <input type="text" id="nameInput" class="login-input" placeholder="Enter your name" required>
+        <input type="email" id="emailInput" class="login-input" placeholder="Enter your email" required>
+        <button class="login-btn" onclick="login()">Start Tracking</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- APP SCREEN -->
+  <div id="appScreen" class="app-screen">
+    <header>
+      <div class="header-content">
+        <div class="logo">🌱 Greener HTown</div>
+        <nav>
+          <button class="nav-btn active" onclick="showPage('dashboard')">Dashboard</button>
+          <button class="nav-btn" onclick="showPage('track')">Track Carbon</button>
+          <button class="nav-btn" onclick="showPage('volunteer')">Volunteer</button>
+          <button class="nav-btn" onclick="showPage('rewards')">Rewards</button>
+          <button class="nav-btn" onclick="showPage('houston')">Houston Info</button>
+          <button class="nav-btn" onclick="showPage('contact')">Contact</button>
+        </nav>
+        <div style="display: flex; align-items: center; gap: 1rem;">
+          <div class="user-info"><strong id="userName">User</strong></div>
+          <button class="logout-btn" onclick="logout()">Logout</button>
+        </div>
+      </div>
+    </header>
+
+    <div class="container">
+      <!-- DASHBOARD -->
+      <div id="dashboard" class="page active">
+        <h1 class="section-title">🚀 Your Carbon Dashboard</h1>
+
+        <!-- DAILY FUN FACT -->
+        <div class="info-card" style="margin-bottom: 2rem; background: linear-gradient(135deg, rgba(16, 185, 129, 0.15) 0%, rgba(14, 165, 233, 0.15) 100%);">
+          <div style="display: flex; align-items: center; gap: 1rem; margin-bottom: 0.8rem;">
+            <div style="font-size: 2.5rem;">💡</div>
+            <div class="info-title" style="margin-bottom: 0;">Daily Sustainability Fact</div>
+          </div>
+          <p id="dailyFact" style="color: #cbd5e1; font-size: 1.05rem; line-height: 1.7;"></p>
+        </div>
+
+        <!-- STATS -->
+        <div class="stats-grid">
+          <div class="stat-card">
+            <div class="stat-value" id="saved">0</div>
+            <div class="stat-label">lbs CO₂ Saved</div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-value" id="streak">0</div>
+            <div class="stat-label">Day Streak 🔥</div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-value" id="trees">0</div>
+            <div class="stat-label">Trees Equivalent</div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-value" id="money">$0</div>
+            <div class="stat-label">Money Saved</div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-value" id="miles">0</div>
+            <div class="stat-label">Miles Clean Travel</div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-value" id="meals">0</div>
+            <div class="stat-label">Plant Meals</div>
+          </div>
+        </div>
+
+        <!-- HOUSTON IMPACT -->
+        <div class="info-card" style="margin-bottom: 2rem; border: 2px solid #10b981;">
+          <div style="display: flex; align-items: center; gap: 1rem; margin-bottom: 1rem;">
+            <div style="font-size: 2.5rem;">🏙️</div>
+            <div class="info-title" style="margin-bottom: 0;">Your Houston Impact</div>
+          </div>
+          <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 1.5rem;">
+            <div style="text-align: center;">
+              <div style="font-size: 2rem; font-weight: 800; color: #10b981;" id="houstonRank">-</div>
+              <div style="color: #cbd5e1; font-size: 0.9rem;">Houston Rank</div>
+            </div>
+            <div style="text-align: center;">
+              <div style="font-size: 2rem; font-weight: 800; color: #10b981;" id="carsDays">0</div>
+              <div style="color: #cbd5e1; font-size: 0.9rem;">Cars Off Road (Days)</div>
+            </div>
+            <div style="text-align: center;">
+              <div style="font-size: 2rem; font-weight: 800; color: #10b981;" id="houstonPct">0%</div>
+              <div style="color: #cbd5e1; font-size: 0.9rem;">Better Than Avg Houston</div>
+            </div>
+          </div>
+          <p style="color: #cbd5e1; margin-top: 1rem; text-align: center; font-size: 0.95rem;">
+            You're making a real difference! If all 2.3M Houstonians did this, we'd save <strong style="color: #10b981;" id="cityImpact">0</strong> lbs CO₂!
+          </p>
+        </div>
+
+        <!-- QUICK ACTIONS -->
+        <h2 style="font-size: 1.5rem; margin-bottom: 0.5rem; font-weight: 700;">⚡ Your Quick Log Actions</h2>
+        <p style="color: #cbd5e1; margin-bottom: 1rem; font-size: 0.95rem;">Click any action below to instantly log it! Want to customize these? Just click "Customize Quick Actions" to choose your favorites.</p>
+        
+        <div style="margin-bottom: 1rem;">
+          <button class="btn-primary" style="max-width: 300px; margin: 0 auto; display: block;" onclick="customizeQuickActions()">
+            🎨 Customize Quick Actions
+          </button>
+        </div>
+
+        <div class="quick-actions" id="quickActionsContainer">
+          <button class="quick-btn" onclick="quickLog('Biked', 5)">
+            <span class="quick-icon">🚴</span>
+            <span>Biked 5mi</span>
+          </button>
+          <button class="quick-btn" onclick="quickLog('Plant Meal', 3)">
+            <span class="quick-icon">🥗</span>
+            <span>Plant Meal</span>
+          </button>
+          <button class="quick-btn" onclick="quickLog('Metro', 7)">
+            <span class="quick-icon">🚌</span>
+            <span>Metro Ride</span>
+          </button>
+          <button class="quick-btn" onclick="quickLog('Composted', 2)">
+            <span class="quick-icon">♻️</span>
+            <span>Composted</span>
+          </button>
+          <button class="quick-btn" onclick="quickLog('Walked', 4)">
+            <span class="quick-icon">🚶</span>
+            <span>Walked 2mi</span>
+          </button>
+          <button class="quick-btn" onclick="quickLog('Solar', 10)">
+            <span class="quick-icon">☀️</span>
+            <span>Used Solar</span>
+          </button>
+          <button class="quick-btn" onclick="quickLog('Recycled', 3)">
+            <span class="quick-icon">♻️</span>
+            <span>Recycled</span>
+          </button>
+          <button class="quick-btn" onclick="quickLog('EV', 8)">
+            <span class="quick-icon">⚡</span>
+            <span>EV Charge</span>
+          </button>
+        </div>
+
+        <!-- ACHIEVEMENTS & MILESTONES -->
+        <div style="margin-top: 2rem;">
+          <h2 style="font-size: 1.5rem; margin-bottom: 1rem; font-weight: 700;">🏆 Your Achievements</h2>
+          <div class="quick-actions" id="achievementsContainer">
+            <!-- Achievements will be dynamically added here -->
+          </div>
+        </div>
+      </div>
+
+      <!-- TRACK -->
+      <div id="track" class="page">
+        <h1 class="section-title">📝 Track Your Carbon</h1>
+        
+        <div class="tracking-card">
+          <div class="tabs">
+            <button class="tab-btn active" onclick="switchTab('transport')">🚗 Transport</button>
+            <button class="tab-btn" onclick="switchTab('food')">🍔 Food</button>
+            <button class="tab-btn" onclick="switchTab('energy')">⚡ Energy</button>
+            <button class="tab-btn" onclick="switchTab('waste')">♻️ Waste</button>
+          </div>
+
+          <!-- TRANSPORT -->
+          <div id="transport" class="tab-content active">
+            <form onsubmit="logTransport(event)">
+              <div class="form-group">
+                <label class="form-label">Transportation Mode</label>
+                <select id="mode" onchange="calcTransport()">
+                  <option value="0.78">🚗 Gas Car (0.78 lbs/mi)</option>
+                  <option value="1.09">🚙 Gas SUV (1.09 lbs/mi)</option>
+                  <option value="0.52">🚗 Hybrid (0.52 lbs/mi)</option>
+                  <option value="0.15">⚡ Electric Vehicle (0.15 lbs/mi)</option>
+                  <option value="0.14">🚌 Metro/Bus (0.14 lbs/mi)</option>
+                  <option value="-0.78">🚴 Bicycle (Save 0.78 lbs/mi)</option>
+                  <option value="-0.78">🚶 Walking (Save 0.78 lbs/mi)</option>
+                </select>
+              </div>
+              <div class="form-group">
+                <label class="form-label">Distance (miles)</label>
+                <input type="number" id="miles" step="0.1" min="0" placeholder="Enter miles" oninput="calcTransport()" required>
+              </div>
+              <div class="impact-box" id="transport-impact">Enter distance to calculate impact</div>
+              <button type="submit" class="btn-primary">Log Transportation</button>
+            </form>
+          </div>
+
+          <!-- FOOD -->
+          <div id="food" class="tab-content">
+            <form onsubmit="logFood(event)">
+              <div class="form-group">
+                <label class="form-label">Meal Type</label>
+                <select id="foodtype" onchange="calcFood()">
+                  <option value="6">🥩 Beef (6 lbs CO₂)</option>
+                  <option value="3.5">🥓 Pork (3.5 lbs CO₂)</option>
+                  <option value="2">🍗 Chicken (2 lbs CO₂)</option>
+                  <option value="1.5">🐟 Fish (1.5 lbs CO₂)</option>
+                  <option value="0.8">🥗 Vegetarian (0.8 lbs CO₂)</option>
+                  <option value="0.5">🌱 Vegan (0.5 lbs CO₂)</option>
+                </select>
+              </div>
+              <div class="form-group">
+                <label class="form-label">Number of Servings</label>
+                <input type="number" id="servings" min="1" value="1" onchange="calcFood()" required>
+              </div>
+              <div class="impact-box" id="food-impact">1 serving selected</div>
+              <button type="submit" class="btn-primary">Log Meal</button>
+            </form>
+          </div>
+
+          <!-- ENERGY -->
+          <div id="energy" class="tab-content">
+            <form onsubmit="logEnergy(event)">
+              <div class="form-group">
+                <label class="form-label">Houston Energy Provider</label>
+                <select id="provider" onchange="updateEnergySource()">
+                  <option value="">Select your provider...</option>
+                  <option value="reliant">Reliant Energy</option>
+                  <option value="txu">TXU Energy</option>
+                  <option value="green-mountain">Green Mountain Energy (100% Renewable)</option>
+                  <option value="direct-energy">Direct Energy</option>
+                  <option value="champion">Champion Energy</option>
+                  <option value="gexa">Gexa Energy</option>
+                  <option value="solar">My Own Solar Panels</option>
+                  <option value="centerpoint">CenterPoint Energy (Default)</option>
+                </select>
+              </div>
+              <div class="form-group">
+                <label class="form-label">Energy Source Type</label>
+                <select id="source" onchange="calcEnergy()">
+                  <option value="1.2">🏭 Standard Grid - Fossil Fuels (1.2 lbs/kWh)</option>
+                  <option value="0.3">🌿 Grid - Renewable Mix (0.3 lbs/kWh)</option>
+                  <option value="0">☀️ Solar Panels (0 lbs/kWh)</option>
+                  <option value="0">💨 Wind Power (0 lbs/kWh)</option>
+                  <option value="0.02">💧 Hydroelectric (0.02 lbs/kWh)</option>
+                </select>
+              </div>
+              <div class="form-group">
+                <label class="form-label">Energy Usage (kWh)</label>
+                <input type="number" id="kwh" step="0.1" min="0" placeholder="Check your electric bill" oninput="calcEnergy()" required>
+              </div>
+              <div class="impact-box" id="energy-impact">Enter kWh to calculate impact</div>
+              <button type="submit" class="btn-primary">Log Energy</button>
+            </form>
+          </div>
+
+          <!-- WASTE -->
+          <div id="waste" class="tab-content">
+            <form onsubmit="logWaste(event)">
+              <div class="form-group">
+                <label class="form-label">Waste Action</label>
+                <select id="wastetype" onchange="calcWaste()">
+                  <option value="0.5">♻️ Recycled Items (Save 0.5 lbs per lb)</option>
+                  <option value="1">🌱 Composted Waste (Save 1 lb per lb)</option>
+                  <option value="2">🔄 Used Reusable Items (Save 2 lbs per item)</option>
+                  <option value="5">🌍 Zero Waste Day (Save 5 lbs)</option>
+                </select>
+              </div>
+              <div class="form-group">
+                <label class="form-label">Weight or Quantity (lbs or items)</label>
+                <input type="number" id="wastewt" step="0.1" min="0" placeholder="Enter amount" oninput="calcWaste()" required>
+              </div>
+              <div class="impact-box" id="waste-impact">Enter amount to calculate impact</div>
+              <button type="submit" class="btn-primary">Log Waste Action</button>
+            </form>
+          </div>
+        </div>
+      </div>
+
+      <!-- VOLUNTEER -->
+      <div id="volunteer" class="page">
+        <h1 class="section-title">🤝 Volunteer Opportunities</h1>
+
+        <div style="text-align: center; padding: 4rem 2rem;">
+          <div style="font-size: 5rem; margin-bottom: 2rem;">🌱</div>
+          <h2 style="font-size: 2.5rem; margin-bottom: 1rem; color: #10b981;">Coming Soon!</h2>
+          <p style="font-size: 1.2rem; color: #cbd5e1; max-width: 600px; margin: 0 auto; line-height: 1.8;">
+            We're building an amazing volunteer program for Houston! Soon you'll be able to:
+          </p>
+          
+          <div class="info-card" style="max-width: 700px; margin: 3rem auto; text-align: left;">
+            <ul class="info-list">
+              <li><strong>🌳 Tree Planting Events:</strong> Join community tree planting days across Houston neighborhoods</li>
+              <li><strong>🚮 Park Clean-Ups:</strong> Help keep Houston's parks and green spaces beautiful</li>
+              <li><strong>♻️ Recycling Drives:</strong> Organize and participate in local recycling initiatives</li>
+              <li><strong>📚 Education Programs:</strong> Teach others about sustainability and carbon reduction</li>
+              <li><strong>🏘️ Neighborhood Projects:</strong> Work with your local community on green initiatives</li>
+              <li><strong>🎓 School Outreach:</strong> Bring environmental awareness to Houston schools</li>
+            </ul>
+          </div>
+
+          <p style="font-size: 1.1rem; color: #cbd5e1; margin-top: 2rem;">
+            Want to get notified when volunteer opportunities launch?<br>
+            <strong style="color: #10b981;">Contact us and we'll keep you in the loop!</strong>
+          </p>
+        </div>
+      </div>
+
+      <!-- REWARDS -->
+      <div id="rewards" class="page">
+        <h1 class="section-title">🎁 Rewards Program</h1>
+
+        <div style="text-align: center; padding: 4rem 2rem;">
+          <div style="font-size: 5rem; margin-bottom: 2rem;">🏆</div>
+          <h2 style="font-size: 2.5rem; margin-bottom: 1rem; color: #10b981;">Coming Soon!</h2>
+          <p style="font-size: 1.2rem; color: #cbd5e1; max-width: 600px; margin: 0 auto; line-height: 1.8;">
+            Get ready for an exciting rewards program! You'll earn points for every eco-friendly action:
+          </p>
+          
+          <div class="info-card" style="max-width: 700px; margin: 3rem auto; text-align: left;">
+            <ul class="info-list">
+              <li><strong>🎯 Earn Points:</strong> Every carbon-saving action earns you reward points</li>
+              <li><strong>🏅 Achievement Badges:</strong> Unlock special badges for milestones and challenges</li>
+              <li><strong>🎁 Redeem Rewards:</strong> Exchange points for eco-friendly products and services</li>
+              <li><strong>🤝 Local Partnerships:</strong> Discounts at Houston green businesses and restaurants</li>
+              <li><strong>🌳 Carbon Offsets:</strong> Use points to fund tree planting and renewable energy</li>
+              <li><strong>🏆 Leaderboard Prizes:</strong> Monthly prizes for top Houston carbon savers</li>
+              <li><strong>💚 VIP Status:</strong> Unlock exclusive perks as you level up</li>
+            </ul>
+          </div>
+
+          <div class="info-card" style="max-width: 700px; margin: 3rem auto; background: linear-gradient(135deg, rgba(16, 185, 129, 0.2) 0%, rgba(14, 165, 233, 0.2) 100%);">
+            <div class="info-title">🎮 Sneak Peek: Points System</div>
+            <ul class="info-list">
+              <li>🚴 Bike 5 miles = <strong style="color: #10b981;">50 points</strong></li>
+              <li>🥗 Plant-based meal = <strong style="color: #10b981;">30 points</strong></li>
+              <li>🚌 Metro ride = <strong style="color: #10b981;">70 points</strong></li>
+              <li>♻️ Recycling = <strong style="color: #10b981;">30 points</strong></li>
+              <li>☀️ Solar usage = <strong style="color: #10b981;">100 points</strong></li>
+              <li>🔥 10-day streak = <strong style="color: #10b981;">500 BONUS points</strong></li>
+            </ul>
+          </div>
+
+          <p style="font-size: 1.1rem; color: #cbd5e1; margin-top: 2rem;">
+            Excited about rewards? We are too!<br>
+            <strong style="color: #10b981;">Contact us to share ideas or get early access!</strong>
+          </p>
+        </div>
+      </div>
+
+      <!-- CONTACT -->
+      <div id="contact" class="page">
+        <h1 class="section-title">📞 Get in Touch</h1>
+        
+        <div style="text-align: center; margin-bottom: 2rem;">
+          <p style="font-size: 1.2rem; color: #cbd5e1; max-width: 700px; margin: 0 auto; line-height: 1.8;">
+            Have questions, suggestions, or want to collaborate? We'd love to hear from you!<br>
+            <strong style="color: #10b981;">Let's make Houston greener together! 🌱</strong>
+          </p>
+        </div>
+
+        <div class="info-card" style="max-width: 800px; margin: 0 auto 2rem;">
+          <div class="info-title">📧 Contact Information</div>
+          <ul class="info-list">
+            <li>
+              <strong>Email:</strong> 
+              <a href="/cdn-cgi/l/email-protection#492d2128203b302839283b302827207b797879092e24282025672a2624" style="color: #10b981; text-decoration: none;">
+                <span class="__cf_email__" data-cfemail="f4909c959d868d958495868d959a9dc6c4c5c4b49399959d98da979b99">[email&#160;protected]</span>
+              </a>
+            </li>
+            <li>
+              <strong>LinkedIn:</strong> 
+              <a href="https://www.linkedin.com/in/dhairyaparyani" target="_blank" style="color: #10b981; text-decoration: none;">
+                Dhairya Paryani
+              </a>
+            </li>
+            <li>
+              <strong>Instagram:</strong> 
+              <a href="https://www.instagram.com/greenerhtown" target="_blank" style="color: #10b981; text-decoration: none;">
+                @greenerhtown
+              </a>
+            </li>
+          </ul>
+        </div>
+
+        <div class="features-grid" style="max-width: 900px; margin: 0 auto;">
+          <a href="/cdn-cgi/l/email-protection#781c1019110a011908190a011916114a484948381f15191114561b1715" class="feature-card" style="text-decoration: none; color: inherit;">
+            <div class="feature-icon">📧</div>
+            <h3>Email Us</h3>
+            <p>Send us your questions, feedback, or collaboration ideas</p>
+          </a>
+
+          <a href="https://www.linkedin.com/in/dhairyaparyani" target="_blank" class="feature-card" style="text-decoration: none; color: inherit;">
+            <div class="feature-icon">💼</div>
+            <h3>Connect on LinkedIn</h3>
+            <p>Professional networking and updates about Greener HTown</p>
+          </a>
+
+          <a href="https://www.instagram.com/greenerhtown" target="_blank" class="feature-card" style="text-decoration: none; color: inherit;">
+            <div class="feature-icon">📸</div>
+            <h3>Follow on Instagram</h3>
+            <p>Daily tips, Houston green news, and community highlights</p>
+          </a>
+        </div>
+
+        <div class="info-card" style="max-width: 800px; margin: 3rem auto; background: linear-gradient(135deg, rgba(16, 185, 129, 0.15) 0%, rgba(14, 165, 233, 0.15) 100%);">
+          <div class="info-title">💭 We Want to Hear From You!</div>
+          <ul class="info-list">
+            <li><strong>🐛 Found a bug?</strong> Let us know so we can fix it!</li>
+            <li><strong>💡 Have an idea?</strong> We're always looking for ways to improve</li>
+            <li><strong>🤝 Want to partner?</strong> Businesses and organizations welcome</li>
+            <li><strong>📰 Media inquiries?</strong> We'd love to share our story</li>
+            <li><strong>🎓 Student or researcher?</strong> Happy to help with projects</li>
+            <li><strong>🌱 Just want to chat?</strong> We're here for that too!</li>
+          </ul>
+        </div>
+
+        <!-- HOUSTON ENVIRONMENTAL TIPS -->
+        <div class="info-card" style="max-width: 800px; margin: 3rem auto;">
+          <div class="info-title">🌱 Houston Sustainability Tips</div>
+          <ul class="info-list">
+            <li><strong>🌡️ Beat the Heat Efficiently:</strong> Houston summers are brutal! Set your AC to 78°F when home, 82°F when away. Each degree higher saves 3-5% on cooling costs.</li>
+            <li><strong>🚌 Use METRO:</strong> Houston Metro serves 1.3M+ square miles. Park & Ride locations make commuting easy and can save you $200+/month in gas and parking.</li>
+            <li><strong>🌳 Plant Native Trees:</strong> Texas Live Oak and Bald Cypress thrive here, provide shade, and reduce cooling needs by up to 25%.</li>
+            <li><strong>💧 Water Smart:</strong> Water your lawn early morning (before 10am) to reduce evaporation. Houston's humidity helps - you need less water than you think!</li>
+            <li><strong>☀️ Go Solar:</strong> Houston gets 204 sunny days/year. Solar panels pay for themselves in 7-12 years with federal tax credits.</li>
+            <li><strong>♻️ Recycle Right:</strong> Houston accepts #1-7 plastics, paper, cardboard, glass, and aluminum. Rinse containers and keep them dry.</li>
+            <li><strong>🏢 Energy Deregulation:</strong> You can choose 100% renewable energy providers like Green Mountain Energy - same price, zero emissions!</li>
+            <li><strong>🌊 Protect Buffalo Bayou:</strong> Keep storm drains clear. Everything in Houston drains to the bayou and eventually Galveston Bay.</li>
+          </ul>
+        </div>
+      </div>
+      <div id="houston" class="page">
+        <h1 class="section-title">🏙️ Houston Energy & Solar Info</h1>
+
+        <div class="info-card">
+          <div class="info-title">⚡ Houston Energy Providers</div>
+          <ul class="info-list">
+            <li><strong>Reliant Energy:</strong> One of Texas's largest retail electricity providers. Offers multiple plans including renewable energy options.</li>
+            <li><strong>TXU Energy:</strong> Major provider serving Houston with various fixed and variable rate plans.</li>
+            <li><strong>Green Mountain Energy:</strong> 100% renewable energy provider - all plans use wind and solar power. Great for carbon reduction!</li>
+            <li><strong>Direct Energy:</strong> National provider with competitive rates and renewable energy options in Houston.</li>
+            <li><strong>Champion Energy:</strong> Texas-based provider offering both standard and renewable energy plans.</li>
+            <li><strong>Gexa Energy:</strong> Retail electricity provider with green energy options available in Houston.</li>
+            <li><strong>CenterPoint Energy:</strong> Houston's main electricity delivery company (manages the grid infrastructure).</li>
+          </ul>
+        </div>
+
+        <div class="info-card">
+          <div class="info-title">☀️ Houston Solar Information</div>
+          <ul class="info-list">
+            <li><strong>Solar Potential:</strong> Houston receives an average of 204 sunny days per year, making it excellent for solar power generation.</li>
+            <li><strong>Peak Sun Hours:</strong> Houston averages 4.5-5 peak sun hours per day, ideal for residential solar panels.</li>
+            <li><strong>Cost Savings:</strong> Solar panels can reduce your electric bill by 50-90% depending on system size and usage.</li>
+            <li><strong>Payback Period:</strong> Typical solar systems in Houston pay for themselves in 7-12 years with federal and state incentives.</li>
+            <li><strong>Federal Tax Credit:</strong> 30% federal solar investment tax credit available through 2032.</li>
+            <li><strong>Net Metering:</strong> Many Houston providers offer net metering - sell excess solar power back to the grid.</li>
+            <li><strong>Popular Houston Solar Installers:</strong> Freedom Solar Power, Sunshine Renewable Solutions, Texas Solar Outfitters.</li>
+          </ul>
+        </div>
+
+        <div class="info-card">
+          <div class="info-title">🌱 Houston Green Energy Facts</div>
+          <ul class="info-list">
+            <li><strong>Renewable Energy Mix:</strong> Texas leads the nation in wind energy production, with increasing solar capacity.</li>
+            <li><strong>Houston Climate:</strong> Hot, humid summers mean high AC usage - solar panels perform well in Houston's sunny climate.</li>
+            <li><strong>Energy Deregulation:</strong> Houston's deregulated market means you can choose 100% renewable energy providers easily.</li>
+            <li><strong>Average Usage:</strong> Houston homes use about 1,200-1,400 kWh per month (higher in summer due to AC).</li>
+            <li><strong>Carbon Intensity:</strong> Texas grid electricity produces about 1.2 lbs CO₂ per kWh (standard fossil fuel mix).</li>
+            <li><strong>Green Options:</strong> Switching to 100% renewable energy from providers like Green Mountain instantly reduces your carbon footprint.</li>
+          </ul>
+        </div>
+
+        <div class="info-card">
+          <div class="info-title">📞 Helpful Resources</div>
+          <ul class="info-list">
+            <li><strong>Power to Choose:</strong> www.powertochoose.org - Compare all Houston electricity providers and plans.</li>
+            <li><strong>CenterPoint Energy:</strong> www.centerpointenergy.com - Report outages and manage your delivery service.</li>
+            <li><strong>Houston Solar Resources:</strong> Check with City of Houston Office of Sustainability for local solar programs.</li>
+            <li><strong>Energy Efficiency:</strong> Visit www.energystar.gov for tips on reducing home energy consumption.</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="toast" id="toast"></div>
+
+  <!-- ONBOARDING OVERLAY -->
+  <div class="onboarding-overlay" id="onboardingOverlay">
+    <div class="onboarding-popup">
+      <div class="onboarding-step-number" id="stepNumber">1</div>
+      <div class="onboarding-title" id="stepTitle">Welcome to Greener HTown! 🌱</div>
+      <div class="onboarding-text" id="stepText">
+        Let's take a quick tour to help you get started tracking your carbon impact in Houston!
+      </div>
+      <div class="onboarding-buttons">
+        <button class="onboarding-btn onboarding-btn-skip" onclick="skipOnboarding()">Skip Tour</button>
+        <button class="onboarding-btn onboarding-btn-next" onclick="nextStep()">Let's Go! →</button>
+      </div>
+      <div class="onboarding-progress" id="stepProgress">Step 1 of 5</div>
+    </div>
+  </div>
+
+  <!-- AI CHATBOT -->
+  <div class="chatbot-container">
+    <button class="chatbot-button" onclick="toggleChatbot()" title="Need help? Chat with us!">
+      🤖
+    </button>
+    
+    <div class="chatbot-window" id="chatbotWindow">
+      <div class="chatbot-header">
+        <div class="chatbot-header-title">🤖 Greener HTown AI Assistant</div>
+        <button class="chatbot-close" onclick="toggleChatbot()">×</button>
+      </div>
+      
+      <div class="chatbot-messages" id="chatbotMessages">
+        <div class="chatbot-message chatbot-message-bot">
+          Hi! 👋 I'm here to help you track your carbon footprint in Houston. How can I assist you today?
+        </div>
+      </div>
+      
+      <div class="chatbot-quick-replies">
+        <button class="chatbot-quick-reply" onclick="sendQuickReply('How do I log an action?')">How to log?</button>
+        <button class="chatbot-quick-reply" onclick="sendQuickReply('What are CO₂ savings?')">What is CO₂?</button>
+        <button class="chatbot-quick-reply" onclick="sendQuickReply('Houston energy info')">Energy info</button>
+        <button class="chatbot-quick-reply" onclick="sendQuickReply('Solar panels')">Solar panels</button>
+      </div>
+      
+      <div class="chatbot-input-container">
+        <input type="text" class="chatbot-input" id="chatbotInput" placeholder="Type your question..." onkeypress="chatbotKeyPress(event)">
+        <button class="chatbot-send" onclick="sendChatMessage()">Send</button>
+      </div>
+    </div>
+  </div>
+
+  <script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script>
+    // STATE MANAGEMENT
+    let user = {name: '', email: ''};
+    let state = {
+      saved: 0, 
+      streak: 0, 
+      lastLog: null, 
+      onboardingComplete: false,
+      cleanMiles: 0,
+      plantMeals: 0,
+      totalActions: 0
+    };
+    let currentOnboardingStep = 0;
+
+    // DAILY SUSTAINABILITY FACTS
+    const sustainabilityFacts = [
+      "Houston produces 12% of the nation's oil refining capacity. Choosing renewable energy makes a huge local impact! 🏭",
+      "A single tree in Houston can absorb 48 lbs of CO₂ per year. You've saved the equivalent of planting trees! 🌳",
+      "Houston's average household uses 1,200 kWh/month. Switching to LED bulbs saves 75% energy vs incandescent! 💡",
+      "The Houston Metro system removes 17 million car trips from Houston roads annually. Every metro ride counts! 🚌",
+      "Houstonians throw away 1.5 million tons of trash yearly. Composting can reduce your waste by 30%! ♻️",
+      "Houston has 50,000+ acres of parks. Every bike ride instead of driving keeps our air cleaner! 🚴",
+      "A plant-based meal uses 1/8th the emissions of beef. Small dietary changes = massive impact! 🥗",
+      "Houston's humidity means your AC works harder. A programmable thermostat saves $180/year! 🌡️",
+      "Buffalo Bayou Partnership has planted 31,000 trees. Your actions help preserve Houston's green spaces! 🌿",
+      "Houston is the 4th largest city in the US. If we all reduce 10%, that's millions of lbs of CO₂ saved! 🏙️",
+      "Texas leads the US in wind energy production. Choosing renewable providers supports local green jobs! 💨",
+      "An EV in Houston costs ~$0.03/mile vs $0.15/mile for gas. Better for wallet AND planet! ⚡",
+      "Houston gets 204 sunny days/year. That's 56% of the year perfect for solar power generation! ☀️",
+      "The average Houstonian drives 15,000 miles/year. Biking just 10% saves 1,170 lbs CO₂! 🚲",
+      "Houston's recycling program diverts 100,000 tons from landfills yearly. Your recycling matters! 🌍"
+    ];
+
+    const achievements = [
+      {icon: '🌱', title: 'Getting Started', desc: 'First action logged!', threshold: 1},
+      {icon: '🔥', title: '7-Day Streak', desc: 'Consistent eco-warrior!', threshold: 7, type: 'streak'},
+      {icon: '💯', title: '100 lbs Saved', desc: 'Major milestone!', threshold: 100},
+      {icon: '🌳', title: 'Tree Planter', desc: 'Equivalent to 1 tree!', threshold: 60},
+      {icon: '🚴', title: 'Eco Commuter', desc: '50 miles clean travel', threshold: 50, type: 'miles'},
+      {icon: '🥗', title: 'Plant Powered', desc: '10 plant-based meals', threshold: 10, type: 'meals'},
+      {icon: '⚡', title: 'Energy Saver', desc: '500 lbs CO₂ saved!', threshold: 500},
+      {icon: '🏆', title: 'Houston Hero', desc: '1,000 lbs saved!', threshold: 1000},
+      {icon: '🌟', title: 'Carbon Champion', desc: '2,000 lbs saved!', threshold: 2000},
+      {icon: '🔥', title: '30-Day Streak', desc: 'Unstoppable!', threshold: 30, type: 'streak'}
+    ];
+
+    const onboardingSteps = [
+      {
+        title: "Welcome to Greener HTown! 🌱",
+        text: "Let's take a quick tour to help you get started tracking your carbon impact in Houston!"
+      },
+      {
+        title: "Track Your Carbon 📝",
+        text: "Click 'Track Carbon' to log actions like biking, plant-based meals, metro rides, and more. Each action saves CO₂ and helps Houston!"
+      },
+      {
+        title: "Quick Actions ⚡",
+        text: "Use Quick Actions on your dashboard for instant logging! You can even customize them to match your lifestyle. Try clicking 'Customize Quick Actions'."
+      },
+      {
+        title: "Watch Your Impact Grow 📊",
+        text: "Your dashboard shows CO₂ saved, money saved, streak days, and tree equivalents. Watch these numbers grow as you make greener choices!"
+      },
+      {
+        title: "Houston Resources 🏙️",
+        text: "Check 'Houston Info' for local energy providers, solar information, and green resources. Need help anytime? Use the AI chatbot in the bottom right!"
+      }
+    ];
+
+    // ONBOARDING FUNCTIONS
+    function nextStep() {
+      currentOnboardingStep++;
+      if (currentOnboardingStep >= onboardingSteps.length) {
+        completeOnboarding();
+      } else {
+        updateOnboardingStep();
+      }
+    }
+
+    function updateOnboardingStep() {
+      const step = onboardingSteps[currentOnboardingStep];
+      document.getElementById('stepNumber').textContent = currentOnboardingStep + 1;
+      document.getElementById('stepTitle').textContent = step.title;
+      document.getElementById('stepText').textContent = step.text;
+      document.getElementById('stepProgress').textContent = `Step ${currentOnboardingStep + 1} of ${onboardingSteps.length}`;
+      
+      // Change button text on last step
+      if (currentOnboardingStep === onboardingSteps.length - 1) {
+        document.querySelector('.onboarding-btn-next').textContent = "Let's Start! 🚀";
+      }
+    }
+
+    function skipOnboarding() {
+      if (confirm("Skip the tour? You can always ask our AI chatbot for help!")) {
+        completeOnboarding();
+      }
+    }
+
+    function completeOnboarding() {
+      document.getElementById('onboardingOverlay').classList.remove('active');
+      state.onboardingComplete = true;
+      saveState();
+      showToast("🎉 You're all set! Start tracking your carbon impact!");
+    }
+
+    // CHATBOT FUNCTIONS
+    function toggleChatbot() {
+      const chatbot = document.getElementById('chatbotWindow');
+      chatbot.classList.toggle('active');
+      if (chatbot.classList.contains('active')) {
+        document.getElementById('chatbotInput').focus();
+      }
+    }
+
+    function sendChatMessage() {
+      const input = document.getElementById('chatbotInput');
+      const message = input.value.trim();
+      
+      if (!message) return;
+      
+      addChatMessage(message, 'user');
+      input.value = '';
+      
+      // Simulate AI response
+      setTimeout(() => {
+        const response = getChatbotResponse(message);
+        addChatMessage(response, 'bot');
+      }, 500);
+    }
+
+    function sendQuickReply(message) {
+      addChatMessage(message, 'user');
+      setTimeout(() => {
+        const response = getChatbotResponse(message);
+        addChatMessage(response, 'bot');
+      }, 500);
+    }
+
+    function addChatMessage(text, sender) {
+      const messagesContainer = document.getElementById('chatbotMessages');
+      const messageDiv = document.createElement('div');
+      messageDiv.className = `chatbot-message chatbot-message-${sender}`;
+      messageDiv.textContent = text;
+      messagesContainer.appendChild(messageDiv);
+      messagesContainer.scrollTop = messagesContainer.scrollHeight;
+    }
+
+    function getChatbotResponse(message) {
+      const msg = message.toLowerCase();
+      
+      // Logging help
+      if (msg.includes('log') || msg.includes('track') || msg.includes('how')) {
+        return "To log an action: Click 'Track Carbon' → Choose a category (Transport, Food, Energy, Waste) → Fill in the details → Click the log button. You'll see your CO₂ savings update instantly! 🎯";
+      }
+      
+      // CO2 explanation
+      if (msg.includes('co2') || msg.includes('co₂') || msg.includes('carbon') || msg.includes('savings')) {
+        return "CO₂ (carbon dioxide) is a greenhouse gas. Every action you log calculates how much CO₂ you saved compared to typical choices. For example, biking instead of driving saves about 0.78 lbs CO₂ per mile! 🌍";
+      }
+      
+      // Energy info
+      if (msg.includes('energy') || msg.includes('provider') || msg.includes('electricity')) {
+        return "Check the 'Houston Info' page for all major Houston energy providers like Reliant, TXU, and Green Mountain Energy. You can select your provider when tracking energy usage! ⚡";
+      }
+      
+      // Solar info
+      if (msg.includes('solar') || msg.includes('panel')) {
+        return "Houston gets 204 sunny days/year - perfect for solar! The 'Houston Info' page has details on solar potential, costs, tax credits (30%!), and local installers. Solar panels can reduce your electric bill by 50-90%! ☀️";
+      }
+      
+      // Quick actions
+      if (msg.includes('quick') || msg.includes('customize')) {
+        return "Quick Actions are one-click buttons on your dashboard! Click 'Customize Quick Actions' to choose from 16 options like biking, vegan meals, EV charging, and more. Pick your 8 favorites! ⚡";
+      }
+      
+      // Streak
+      if (msg.includes('streak') || msg.includes('daily')) {
+        return "Your streak counts consecutive days you log actions. Keep logging daily to build your streak and stay motivated! The longer your streak, the bigger your impact! 🔥";
+      }
+      
+      // Rewards
+      if (msg.includes('reward') || msg.includes('points')) {
+        return "Our rewards program is coming soon! You'll earn points for every eco-action, unlock badges, and redeem rewards at local Houston businesses. Stay tuned! 🎁";
+      }
+      
+      // Volunteer
+      if (msg.includes('volunteer') || msg.includes('community')) {
+        return "Volunteer opportunities are launching soon! You'll be able to join tree planting, park cleanups, and education programs across Houston. Check the Volunteer page for updates! 🤝";
+      }
+      
+      // Metro/transit
+      if (msg.includes('metro') || msg.includes('bus') || msg.includes('transit')) {
+        return "Houston Metro rides save about 0.14 lbs CO₂ per mile compared to driving alone. Track metro rides under Transport → Metro/Bus. Every ride counts! 🚌";
+      }
+      
+      // Food/meals
+      if (msg.includes('food') || msg.includes('meal') || msg.includes('vegan') || msg.includes('plant')) {
+        return "Plant-based meals have much lower carbon footprints! Beef: 6 lbs CO₂, Chicken: 2 lbs, Vegan: 0.5 lbs per serving. Track meals under Food category. Small changes make a big difference! 🥗";
+      }
+      
+      // Contact
+      if (msg.includes('contact') || msg.includes('email') || msg.includes('help') || msg.includes('support')) {
+        return "Need more help? Email dhairyaparyani2010@gmail.com, connect on LinkedIn (Dhairya Paryani), or follow @greenerhtown on Instagram. We're here for you! 📧";
+      }
+      
+      // Default response
+      return "Great question! Here's what I can help with: logging actions, understanding CO₂ savings, Houston energy info, solar panels, quick actions, streaks, and more. Try asking about any of these topics! You can also check our Contact page for direct support. 💚";
+    }
+
+    function chatbotKeyPress(event) {
+      if (event.key === 'Enter') {
+        sendChatMessage();
+      }
+    }
+
+    // INITIALIZE
+    window.addEventListener('load', () => {
+      const savedUser = localStorage.getItem('greenerhtown_user');
+      const savedState = localStorage.getItem('greenerhtown_state');
+      
+      if (savedUser && savedState) {
+        user = JSON.parse(savedUser);
+        state = JSON.parse(savedState);
+        
+        // Ensure new properties exist
+        if (!state.cleanMiles) state.cleanMiles = 0;
+        if (!state.plantMeals) state.plantMeals = 0;
+        if (!state.totalActions) state.totalActions = 0;
+        
+        document.getElementById('userName').textContent = user.name;
+        
+        // Hide login screen
+        const loginScreen = document.getElementById('loginScreen');
+        loginScreen.style.display = 'none';
+        
+        // Show app screen
+        const appScreen = document.getElementById('appScreen');
+        appScreen.style.display = 'block';
+        appScreen.classList.add('active');
+        
+        updateStats();
+        displayDailyFact();
+        
+        // Show onboarding for new users
+        if (!state.onboardingComplete) {
+          setTimeout(() => {
+            document.getElementById('onboardingOverlay').classList.add('active');
+          }, 500);
+        }
+      }
+    });
+
+    // LOGIN
+    function login() {
+      const name = document.getElementById('nameInput').value.trim();
+      const email = document.getElementById('emailInput').value.trim();
+      
+      if (!name || !email) {
+        showToast('❌ Please enter both name and email');
+        return;
+      }
+      
+      if (!email.includes('@')) {
+        showToast('❌ Please enter a valid email');
+        return;
+      }
+      
+      user = {name, email};
+      document.getElementById('userName').textContent = name;
+      
+      // Hide login screen
+      const loginScreen = document.getElementById('loginScreen');
+      loginScreen.style.display = 'none';
+      
+      // Show app screen
+      const appScreen = document.getElementById('appScreen');
+      appScreen.style.display = 'block';
+      appScreen.classList.add('active');
+      
+      localStorage.setItem('greenerhtown_user', JSON.stringify(user));
+      localStorage.setItem('greenerhtown_state', JSON.stringify(state));
+      
+      displayDailyFact();
+      updateStats();
+      showToast('🎉 Welcome to Greener HTown, ' + name + '!');
+      
+      // Show onboarding for new users
+      if (!state.onboardingComplete) {
+        setTimeout(() => {
+          document.getElementById('onboardingOverlay').classList.add('active');
+        }, 1000);
+      }
+    }
+
+    // LOGOUT
+    function logout() {
+      // Hide app screen
+      const appScreen = document.getElementById('appScreen');
+      appScreen.classList.remove('active');
+      appScreen.style.display = 'none';
+      
+      // Show login screen
+      const loginScreen = document.getElementById('loginScreen');
+      loginScreen.style.display = 'flex';
+      
+      // Clear input fields
+      document.getElementById('nameInput').value = '';
+      document.getElementById('emailInput').value = '';
+      
+      // Close chatbot if open
+      const chatbotWindow = document.getElementById('chatbotWindow');
+      if (chatbotWindow) {
+        chatbotWindow.classList.remove('active');
+      }
+      
+      // Close onboarding if open
+      const onboardingOverlay = document.getElementById('onboardingOverlay');
+      if (onboardingOverlay) {
+        onboardingOverlay.classList.remove('active');
+      }
+      
+      showToast('👋 Logged out! Your data is saved.');
+    }
+
+    // NAVIGATION
+    function showPage(name) {
+      document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+      document.getElementById(name).classList.add('active');
+      document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('active'));
+      event.target.classList.add('active');
+    }
+
+    function switchTab(name) {
+      document.querySelectorAll('.tab-content').forEach(t => t.classList.remove('active'));
+      document.getElementById(name).classList.add('active');
+      document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+      event.target.classList.add('active');
+    }
+
+    // QUICK LOGGING
+    function quickLog(action, co2) {
+      state.saved += co2;
+      state.totalActions++;
+      
+      // Track specific action types
+      if (action.includes('Bike') || action.includes('Walk') || action === 'Running' || action === 'Metro') {
+        state.cleanMiles += 5; // Approximate miles
+      }
+      if (action.includes('Plant') || action.includes('Vegan') || action.includes('Meal')) {
+        state.plantMeals++;
+      }
+      
+      updateStreak();
+      updateStats();
+      saveState();
+      showToast(`✅ ${action} logged! +${co2} lbs CO₂ saved`);
+      
+      // Check for new achievements
+      checkNewAchievements();
+    }
+
+    // CHECK NEW ACHIEVEMENTS
+    function checkNewAchievements() {
+      achievements.forEach(ach => {
+        let justEarned = false;
+        
+        if (ach.type === 'streak') {
+          justEarned = state.streak === ach.threshold;
+        } else if (ach.type === 'miles') {
+          justEarned = state.cleanMiles >= ach.threshold && state.cleanMiles - 5 < ach.threshold;
+        } else if (ach.type === 'meals') {
+          justEarned = state.plantMeals === ach.threshold;
+        } else {
+          justEarned = state.saved >= ach.threshold && state.saved - 10 < ach.threshold;
+        }
+        
+        if (justEarned) {
+          setTimeout(() => {
+            showToast(`🏆 Achievement Unlocked: ${ach.title}!`);
+          }, 500);
+        }
+      });
+    }
+
+    // UPDATE STATS
+    function updateStats() {
+      document.getElementById('saved').textContent = Math.round(state.saved);
+      document.getElementById('streak').textContent = state.streak;
+      document.getElementById('trees').textContent = Math.round(state.saved / 60);
+      document.getElementById('money').textContent = '$' + Math.round(state.saved * 0.05);
+      document.getElementById('miles').textContent = Math.round(state.cleanMiles);
+      document.getElementById('meals').textContent = state.plantMeals;
+      
+      // Houston Impact Stats
+      const houstonRank = Math.max(1, Math.floor(12800 - (state.saved * 10)));
+      document.getElementById('houstonRank').textContent = '#' + houstonRank.toLocaleString();
+      document.getElementById('carsDays').textContent = (state.saved / 22).toFixed(1);
+      document.getElementById('houstonPct').textContent = Math.min(99, Math.round(state.saved / 10)) + '%';
+      document.getElementById('cityImpact').textContent = (state.saved * 2300000).toLocaleString();
+      
+      // Update achievements
+      updateAchievements();
+    }
+
+    // UPDATE ACHIEVEMENTS
+    function updateAchievements() {
+      const container = document.getElementById('achievementsContainer');
+      container.innerHTML = '';
+      
+      let earnedAchievements = [];
+      
+      achievements.forEach(ach => {
+        let earned = false;
+        if (ach.type === 'streak') {
+          earned = state.streak >= ach.threshold;
+        } else if (ach.type === 'miles') {
+          earned = state.cleanMiles >= ach.threshold;
+        } else if (ach.type === 'meals') {
+          earned = state.plantMeals >= ach.threshold;
+        } else {
+          earned = state.saved >= ach.threshold;
+        }
+        
+        if (earned) {
+          earnedAchievements.push(ach);
+        }
+      });
+      
+      if (earnedAchievements.length === 0) {
+        container.innerHTML = '<div style="grid-column: 1/-1; text-align: center; color: #cbd5e1; padding: 2rem;">Log your first action to start earning achievements! 🎯</div>';
+        return;
+      }
+      
+      earnedAchievements.forEach(ach => {
+        const achDiv = document.createElement('div');
+        achDiv.className = 'quick-btn';
+        achDiv.style.cursor = 'default';
+        achDiv.style.background = 'linear-gradient(135deg, rgba(16, 185, 129, 0.2) 0%, rgba(14, 165, 233, 0.2) 100%)';
+        achDiv.style.border = '2px solid #10b981';
+        achDiv.innerHTML = `
+          <span class="quick-icon">${ach.icon}</span>
+          <div style="font-size: 0.85rem; font-weight: 700;">${ach.title}</div>
+          <div style="font-size: 0.75rem; color: #cbd5e1;">${ach.desc}</div>
+        `;
+        container.appendChild(achDiv);
+      });
+    }
+
+    // DISPLAY DAILY FACT
+    function displayDailyFact() {
+      const today = new Date().toDateString();
+      const savedFact = localStorage.getItem('dailyFact');
+      const savedDate = localStorage.getItem('dailyFactDate');
+      
+      if (savedDate === today && savedFact) {
+        document.getElementById('dailyFact').textContent = savedFact;
+      } else {
+        const randomFact = sustainabilityFacts[Math.floor(Math.random() * sustainabilityFacts.length)];
+        document.getElementById('dailyFact').textContent = randomFact;
+        localStorage.setItem('dailyFact', randomFact);
+        localStorage.setItem('dailyFactDate', today);
+      }
+    }
+
+    // UPDATE STREAK
+    function updateStreak() {
+      const today = new Date().toDateString();
+      if (state.lastLog !== today) {
+        state.streak++;
+        state.lastLog = today;
+      }
+    }
+
+    // SAVE STATE
+    function saveState() {
+      localStorage.setItem('greenerhtown_state', JSON.stringify(state));
+    }
+
+    // TRANSPORT CALCULATIONS
+    function calcTransport() {
+      const rate = parseFloat(document.getElementById('mode').value);
+      const miles = parseFloat(document.getElementById('miles').value) || 0;
+      const co2 = Math.abs(miles * rate);
+      
+      if (miles > 0) {
+        if (rate < 0) {
+          document.getElementById('transport-impact').textContent = 
+            `🚴 Great choice! You'll SAVE ${co2.toFixed(1)} lbs CO₂`;
+        } else {
+          document.getElementById('transport-impact').textContent = 
+            `🚗 Impact: ${co2.toFixed(1)} lbs CO₂`;
+        }
+      } else {
+        document.getElementById('transport-impact').textContent = 'Enter distance to calculate impact';
+      }
+    }
+
+    function logTransport(e) {
+      e.preventDefault();
+      const rate = parseFloat(document.getElementById('mode').value);
+      const miles = parseFloat(document.getElementById('miles').value);
+      const co2 = Math.abs(miles * rate);
+      
+      quickLog('Transport', co2);
+      document.getElementById('miles').value = '';
+      calcTransport();
+    }
+
+    // FOOD CALCULATIONS
+    function calcFood() {
+      const rate = parseFloat(document.getElementById('foodtype').value);
+      const servings = parseInt(document.getElementById('servings').value) || 1;
+      const co2 = rate * servings;
+      
+      document.getElementById('food-impact').textContent = 
+        `🍔 Impact: ${co2.toFixed(1)} lbs CO₂ for ${servings} serving(s)`;
+    }
+
+    function logFood(e) {
+      e.preventDefault();
+      const rate = parseFloat(document.getElementById('foodtype').value);
+      const servings = parseInt(document.getElementById('servings').value);
+      const co2 = rate * servings;
+      
+      quickLog('Meal', co2);
+      calcFood();
+    }
+
+    // ENERGY CALCULATIONS
+    function updateEnergySource() {
+      const provider = document.getElementById('provider').value;
+      const sourceSelect = document.getElementById('source');
+      
+      if (provider === 'green-mountain') {
+        sourceSelect.value = '0.3';
+        showToast('🌿 Green Mountain uses 100% renewable energy!');
+      } else if (provider === 'solar') {
+        sourceSelect.value = '0';
+        showToast('☀️ Solar panels - Zero emissions!');
+      }
+      
+      calcEnergy();
+    }
+
+    function calcEnergy() {
+      const rate = parseFloat(document.getElementById('source').value);
+      const kwh = parseFloat(document.getElementById('kwh').value) || 0;
+      const co2 = rate * kwh;
+      
+      if (kwh > 0) {
+        if (rate === 0) {
+          document.getElementById('energy-impact').textContent = 
+            `☀️ Amazing! Zero emissions from ${kwh.toFixed(1)} kWh`;
+        } else {
+          document.getElementById('energy-impact').textContent = 
+            `⚡ Impact: ${co2.toFixed(1)} lbs CO₂ from ${kwh.toFixed(1)} kWh`;
+        }
+      } else {
+        document.getElementById('energy-impact').textContent = 'Enter kWh to calculate impact';
+      }
+    }
+
+    function logEnergy(e) {
+      e.preventDefault();
+      const rate = parseFloat(document.getElementById('source').value);
+      const kwh = parseFloat(document.getElementById('kwh').value);
+      const co2 = rate * kwh;
+      
+      quickLog('Energy', co2);
+      document.getElementById('kwh').value = '';
+      calcEnergy();
+    }
+
+    // WASTE CALCULATIONS
+    function calcWaste() {
+      const rate = parseFloat(document.getElementById('wastetype').value);
+      const weight = parseFloat(document.getElementById('wastewt').value) || 0;
+      const co2 = rate * weight;
+      
+      if (weight > 0) {
+        document.getElementById('waste-impact').textContent = 
+          `♻️ You'll SAVE ${co2.toFixed(1)} lbs CO₂`;
+      } else {
+        document.getElementById('waste-impact').textContent = 'Enter amount to calculate impact';
+      }
+    }
+
+    function logWaste(e) {
+      e.preventDefault();
+      const rate = parseFloat(document.getElementById('wastetype').value);
+      const weight = parseFloat(document.getElementById('wastewt').value);
+      const co2 = rate * weight;
+      
+      quickLog('Waste Reduction', co2);
+      document.getElementById('wastewt').value = '';
+      calcWaste();
+    }
+
+    // TOAST NOTIFICATIONS
+    function showToast(msg) {
+      const toast = document.getElementById('toast');
+      toast.textContent = msg;
+      toast.classList.add('show');
+      setTimeout(() => toast.classList.remove('show'), 3000);
+    }
+
+    // CUSTOMIZE QUICK ACTIONS
+
+    // CUSTOMIZE QUICK ACTIONS - Better UI with realistic CO2 values
+    function customizeQuickActions() {
+      const modal = document.createElement('div');
+      modal.style.cssText = 'position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(15, 23, 42, 0.95); z-index: 2000; display: flex; align-items: center; justify-content: center; padding: 1rem;';
+      
+      const allActions = [
+        {icon: '🚴', label: 'Bike 1 Mile', action: 'Biked 1mi', co2: 0.78, category: 'Transport'},
+        {icon: '🚲', label: 'Bike 5 Miles', action: 'Biked 5mi', co2: 3.9, category: 'Transport'},
+        {icon: '🚶', label: 'Walk 1 Mile', action: 'Walked 1mi', co2: 0.78, category: 'Transport'},
+        {icon: '🏃', label: 'Run 2 Miles', action: 'Ran 2mi', co2: 1.56, category: 'Transport'},
+        {icon: '🚌', label: 'Metro Ride 5mi', action: 'Metro Ride', co2: 3.5, category: 'Transport'},
+        {icon: '🚊', label: 'Light Rail 5mi', action: 'Light Rail', co2: 3, category: 'Transport'},
+        {icon: '⚡', label: 'EV Drive 10mi', action: 'EV 10mi', co2: 6.3, category: 'Transport'},
+        {icon: '🚗', label: 'Carpool to Work', action: 'Carpooled', co2: 5, category: 'Transport'},
+        {icon: '🥗', label: 'Vegetarian Meal', action: 'Vegetarian Meal', co2: 5.2, category: 'Food'},
+        {icon: '🌱', label: 'Vegan Meal', action: 'Vegan Meal', co2: 5.5, category: 'Food'},
+        {icon: '🍲', label: 'Plant Lunch', action: 'Plant Lunch', co2: 4, category: 'Food'},
+        {icon: '🥙', label: 'Meatless Monday', action: 'Meatless Monday', co2: 6, category: 'Food'},
+        {icon: '☀️', label: 'Solar Power 1hr', action: 'Solar 1hr', co2: 1.2, category: 'Energy'},
+        {icon: '💡', label: 'LED Lights Day', action: 'LED All Day', co2: 0.5, category: 'Energy'},
+        {icon: '🌡️', label: 'AC at 78°F', action: 'AC Efficient', co2: 2, category: 'Energy'},
+        {icon: '🔌', label: 'Unplugged Devices', action: 'Unplugged', co2: 0.3, category: 'Energy'},
+        {icon: '♻️', label: 'Recycled 5 lbs', action: 'Recycled 5lbs', co2: 2.5, category: 'Waste'},
+        {icon: '🌿', label: 'Composted Food', action: 'Composted', co2: 1, category: 'Waste'},
+        {icon: '🛍️', label: 'Reusable Bags', action: 'Reusable Bags', co2: 0.5, category: 'Waste'},
+        {icon: '🥤', label: 'Reusable Bottle', action: 'Reusable Bottle', co2: 0.2, category: 'Waste'},
+        {icon: '💧', label: 'Short Shower', action: 'Short Shower', co2: 0.4, category: 'Water'},
+        {icon: '🚿', label: 'Cold Water Wash', action: 'Cold Wash', co2: 1.5, category: 'Energy'},
+        {icon: '🌳', label: 'Planted Tree', action: 'Planted Tree', co2: 10, category: 'Nature'},
+        {icon: '🌻', label: 'Gardened 1hr', action: 'Gardened', co2: 0.5, category: 'Nature'}
+      ];
+      
+      let selectedIndices = JSON.parse(localStorage.getItem('greenerhtown_quickactions') || '[0,1,4,8,9,12,16,17]');
+      
+      const modalContent = document.createElement('div');
+      modalContent.style.cssText = 'background: linear-gradient(135deg, rgba(30, 41, 59, 0.98) 0%, rgba(26, 42, 74, 0.98) 100%); border: 2px solid #10b981; border-radius: 20px; padding: 2rem; max-width: 900px; width: 100%; max-height: 90vh; overflow-y: auto;';
+      
+      const gridHTML = allActions.map((action, index) => {
+        return '<div class="action-option" data-index="' + index + '" style="background: rgba(30, 41, 59, 0.8); border: 2px solid #334155; border-radius: 12px; padding: 1rem; cursor: pointer; transition: all 0.3s; text-align: center;"><div style="font-size: 2.5rem; margin-bottom: 0.5rem;">' + action.icon + '</div><div style="font-weight: 700; font-size: 0.9rem; margin-bottom: 0.3rem;">' + action.label + '</div><div style="color: #10b981; font-size: 0.8rem; font-weight: 600;">' + action.co2 + ' lbs CO₂</div><div style="color: #64748b; font-size: 0.75rem; margin-top: 0.3rem;">' + action.category + '</div></div>';
+      }).join('');
+      
+      modalContent.innerHTML = '<div style="text-align: center; margin-bottom: 2rem;"><h2 style="font-size: 2rem; font-weight: 800; color: #10b981; margin-bottom: 0.5rem;">🎨 Customize Quick Actions</h2><p style="color: #cbd5e1; font-size: 1rem;">Select 8 actions you do most often. Tap to toggle selection.</p></div><div style="display: grid; grid-template-columns: repeat(auto-fill, minmax(180px, 1fr)); gap: 1rem; margin-bottom: 2rem;" id="actionGrid">' + gridHTML + '</div><div style="display: flex; gap: 1rem; justify-content: center; flex-wrap: wrap;"><button id="cancelBtn" style="background: rgba(51, 65, 85, 0.6); color: #cbd5e1; border: none; padding: 1rem 2rem; border-radius: 10px; font-weight: 700; cursor: pointer; font-size: 1rem;">Cancel</button><button id="saveQuickActions" style="background: linear-gradient(135deg, #10b981 0%, #0ea5e9 100%); color: #0f172a; border: none; padding: 1rem 2rem; border-radius: 10px; font-weight: 700; cursor: pointer; font-size: 1rem;">Save Selection (0/8)</button></div>';
+      
+      modal.appendChild(modalContent);
+      document.body.appendChild(modal);
+      
+      const actionOptions = modalContent.querySelectorAll('.action-option');
+      const saveButton = modalContent.querySelector('#saveQuickActions');
+      const cancelBtn = modalContent.querySelector('#cancelBtn');
+      
+      selectedIndices.forEach(function(idx) {
+        if (actionOptions[idx]) {
+          actionOptions[idx].style.border = '2px solid #10b981';
+          actionOptions[idx].style.background = 'linear-gradient(135deg, rgba(16, 185, 129, 0.2) 0%, rgba(14, 165, 233, 0.2) 100%)';
+        }
+      });
+      
+      function updateSaveButton() {
+        saveButton.textContent = 'Save Selection (' + selectedIndices.length + '/8)';
+        saveButton.disabled = selectedIndices.length === 0;
+        saveButton.style.opacity = selectedIndices.length === 0 ? '0.5' : '1';
+      }
+      
+      updateSaveButton();
+      
+      actionOptions.forEach(function(option, index) {
+        option.addEventListener('click', function() {
+          const idx = selectedIndices.indexOf(index);
+          if (idx > -1) {
+            selectedIndices.splice(idx, 1);
+            option.style.border = '2px solid #334155';
+            option.style.background = 'rgba(30, 41, 59, 0.8)';
+          } else {
+            if (selectedIndices.length < 8) {
+              selectedIndices.push(index);
+              option.style.border = '2px solid #10b981';
+              option.style.background = 'linear-gradient(135deg, rgba(16, 185, 129, 0.2) 0%, rgba(14, 165, 233, 0.2) 100%)';
+            } else {
+              showToast('⚠️ Maximum 8 actions allowed!');
+            }
+          }
+          updateSaveButton();
+        });
+      });
+      
+      cancelBtn.addEventListener('click', function() { modal.remove(); });
+      
+      saveButton.addEventListener('click', function() {
+        if (selectedIndices.length === 0) {
+          showToast('❌ Please select at least one action!');
+          return;
+        }
+        
+        const container = document.getElementById('quickActionsContainer');
+        container.innerHTML = '';
+        
+        selectedIndices.forEach(function(index) {
+          const action = allActions[index];
+          const btn = document.createElement('button');
+          btn.className = 'quick-btn';
+          btn.onclick = function() { quickLog(action.action, action.co2); };
+          btn.innerHTML = '<span class="quick-icon">' + action.icon + '</span><span style="font-size: 0.85rem;">' + action.label + '</span><span style="font-size: 0.7rem; color: #10b981; margin-top: 0.2rem;">' + action.co2 + ' lbs</span>';
+          container.appendChild(btn);
+        });
+        
+        localStorage.setItem('greenerhtown_quickactions', JSON.stringify(selectedIndices));
+        modal.remove();
+        showToast('✅ Quick actions updated!');
+      });
+    }
+  </script>
+</body>
+</html>
